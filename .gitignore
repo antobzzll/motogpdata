@@ -1,3 +1,4 @@
 scraper/venv/
 scraper/.ipynb_checkpoints
 scraper/__pycache__
+.Rproj.user

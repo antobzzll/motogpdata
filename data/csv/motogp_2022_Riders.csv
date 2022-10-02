@@ -1,0 +1,34 @@
+,name,nickname,number,dob,country,height_cm,weight_kg,team,bike
+0,Maverick Viñales,MV12,12,1995-01-12,Spain,171.0,64.0,Aprilia Racing,Aprilia
+1,Lorenzo Savadori,LS32,32,1993-04-04,Italy,177.0,67.0,Aprilia Racing,Aprilia
+2,Aleix Espargaro,AE41,41,1989-07-30,Spain,180.0,66.0,Aprilia Racing,Aprilia
+3,Michele Pirro,MP51,51,1986-07-05,Italy,177.0,69.0,Aruba.it Racing,Ducati
+4,Jack Miller,JM43,43,1995-01-18,Australia,173.0,64.0,Ducati Lenovo Team,Ducati
+5,Francesco Bagnaia,FB63,63,1997-01-14,Italy,176.0,67.0,Ducati Lenovo Team,Ducati
+6,Enea Bastianini,EB23,23,1997-12-30,Italy,168.0,64.0,Gresini Racing MotoGP,Ducati
+7,Fabio Di Giannantonio,FD49,49,1998-10-10,Italy,175.0,68.0,Gresini Racing MotoGP,Ducati
+8,Takaaki Nakagami,TN30,30,1992-02-09,Japan,175.0,70.0,LCR Honda,Honda
+9,Tetsuta Nagashima,TN45,45,1992-07-02,Japan,175.0,66.0,LCR Honda,Honda
+10,Alex Marquez,AM73,73,1996-04-23,Spain,179.0,65.0,LCR Honda,Honda
+11,Fabio Quartararo,FQ20,20,1999-04-20,France,177.0,66.0,Monster Energy Yamaha MotoGP,Yamaha
+12,Franco Morbidelli,FM21,21,1994-12-04,Italy,176.0,64.0,Monster Energy Yamaha MotoGP,Yamaha
+13,Luca Marini,LM10,10,1997-08-10,Italy,184.0,69.0,Mooney VR46 Racing Team,Ducati
+14,Marco Bezzecchi,MB72,72,1998-11-12,Italy,174.0,61.0,Mooney VR46 Racing Team,Ducati
+15,Johann Zarco,JZ5,5,1990-07-16,France,171.0,67.0,Prima Pramac Racing,Ducati
+16,Jorge Martin,JM89,89,1998-01-29,Spain,168.0,62.0,Prima Pramac Racing,Ducati
+17,Brad Binder,BB33,33,1995-08-11,South Africa,170.0,63.0,Red Bull KTM Factory Racing,KTM
+18,Miguel Oliveira,MO88,88,1995-01-04,Portugal,170.0,64.0,Red Bull KTM Factory Racing,KTM
+19,Stefan Bradl,SB6,6,1989-11-29,Germany,170.0,63.0,Repsol Honda Team,Honda
+20,Pol Espargaro,PE44,44,1991-06-10,Spain,171.0,63.0,Repsol Honda Team,Honda
+21,Tetsuta Nagashima,TN45,45,1992-07-02,Japan,175.0,66.0,Repsol Honda Team,Honda
+22,Marc Marquez,MM93,93,1993-02-17,Spain,169.0,65.0,Repsol Honda Team,Honda
+23,Danilo Petrucci,DP9,9,1990-10-24,Italy,181.0,80.0,Team SUZUKI ECSTAR,Suzuki
+24,Joan Mir,JM36,36,1997-09-01,Spain,181.0,69.0,Team SUZUKI ECSTAR,Suzuki
+25,Alex Rins,AR42,42,1995-12-08,Spain,176.0,72.0,Team SUZUKI ECSTAR,Suzuki
+26,Takuya Tsuda,TT85,85,1984-04-27,Japan,,,Team SUZUKI ECSTAR,Suzuki
+27,Kazuki Watanabe,KW92,92,1990-10-02,Japan,,,Team SUZUKI ECSTAR,Suzuki
+28,Raul Fernandez,RF25,25,2000-10-23,Spain,177.0,63.0,Tech3 KTM Factory Racing,KTM
+29,Remy Gardner,RG87,87,1998-02-24,Australia,178.0,72.0,Tech3 KTM Factory Racing,KTM
+30,Andrea Dovizioso,AD04,04,1986-03-23,Italy,165.0,68.0,WithU Yamaha RNF MotoGP Team,Yamaha
+31,Cal Crutchlow,CC35,35,1985-10-29,United Kingdom Of Great Britain And Northern Ireland,170.0,66.0,WithU Yamaha RNF MotoGP Team,Yamaha
+32,Darryn Binder,DB40,40,1998-01-21,South Africa,175.0,63.0,WithU Yamaha RNF MotoGP Team,Yamaha

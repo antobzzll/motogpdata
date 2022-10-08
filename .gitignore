@@ -2,3 +2,8 @@ scraper/venv/
 scraper/.ipynb_checkpoints
 scraper/__pycache__
 .Rproj.user
+.ipynb_checkpoints
+motogpstats.Rproj
+motogpdata/__pycache__
+.Rhistory
+.Rhistory

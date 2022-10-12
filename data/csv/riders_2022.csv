@@ -1,0 +1,36 @@
+,name,surname,birth_city,birth_date,years_old,current_career_step.number,current_career_step.sponsored_team,current_career_step.team.constructor.name,current_career_step.team.name,current_career_step.in_grid,current_career_step.short_nickname,country.iso,country.name
+0,Andrea,Dovizioso,Forlimpopoli ,1986-03-23,36,4,WithU Yamaha RNF MotoGP™ Team,Yamaha,WithU Yamaha RNF MotoGP™ Team,True,AD04,IT,Italy
+1,Johann,Zarco,Cannes,1990-07-16,32,5,Prima Pramac Racing,Ducati,Prima Pramac Racing,True,JZ5,FR,France
+2,Stefan,Bradl,Augsburg,1989-11-29,32,6,Repsol Honda Team,Honda,Repsol Honda Team,True,SB6,DE,Germany
+3,Danilo,Petrucci,Terni,1990-10-24,31,9,Team SUZUKI ECSTAR,Suzuki,Team SUZUKI ECSTAR,True,DP9,IT,Italy
+4,Luca,Marini,Urbino,1997-08-10,25,10,Mooney VR46 Racing Team,Ducati,Mooney VR46 Racing Team,True,LM10,IT,Italy
+5,Maverick,Viñales,Figueres,1995-01-12,27,12,Aprilia Racing,Aprilia,Aprilia Racing,True,MV12,ES,Spain
+6,Fabio,Quartararo,Nice,1999-04-20,23,20,Monster Energy Yamaha MotoGP™,Yamaha,Monster Energy Yamaha MotoGP™,True,FQ20,FR,France
+7,Franco,Morbidelli,Rome,1994-12-04,27,21,Monster Energy Yamaha MotoGP™,Yamaha,Monster Energy Yamaha MotoGP™,True,FM21,IT,Italy
+8,Enea,Bastianini,Rimini,1997-12-30,24,23,Gresini Racing MotoGP™,Ducati,Gresini Racing MotoGP™,True,EB23,IT,Italy
+9,Raul,Fernandez,Madrid,2000-10-23,21,25,Tech3 KTM Factory Racing,KTM,Tech3 KTM Factory Racing,True,RF25,ES,Spain
+10,Dani,Pedrosa,Sabadell,1985-09-29,37,26,Red Bull KTM Factory Racing,KTM,Red Bull KTM Factory Racing,False,DP26,ES,Spain
+11,Takaaki,Nakagami,Chiba,1992-02-09,30,30,LCR Honda IDEMITSU,Honda,LCR Honda,True,TN30,JP,Japan
+12,Lorenzo,Savadori,Cesena,1993-04-04,29,32,Aprilia Racing,,,True,LS32,IT,Italy
+13,Brad,Binder,Potchefstroom,1995-08-11,27,33,Red Bull KTM Factory Racing,KTM,Red Bull KTM Factory Racing,True,BB33,ZA,South Africa
+14,Cal,Crutchlow,Coventry,1985-10-29,36,35,WithU Yamaha RNF MotoGP™ Team,Yamaha,WithU Yamaha RNF MotoGP™ Team,True,CC35,GB,United Kingdom of Great Britain and Northern Ireland
+15,Joan,Mir,Palma de Mallorca,1997-09-01,25,36,Team SUZUKI ECSTAR,Suzuki,Team SUZUKI ECSTAR,True,JM36,ES,Spain
+16,Darryn,Binder,Potchefstroom,1998-01-21,24,40,WithU Yamaha RNF MotoGP™ Team,Yamaha,WithU Yamaha RNF MotoGP™ Team,True,DB40,ZA,South Africa
+17,Aleix,Espargaro,Granollers,1989-07-30,33,41,Aprilia Racing,Aprilia,Aprilia Racing,True,AE41,ES,Spain
+18,Alex,Rins,Barcelona,1995-12-08,26,42,Team SUZUKI ECSTAR,Suzuki,Team SUZUKI ECSTAR,True,AR42,ES,Spain
+19,Jack,Miller,Townsville,1995-01-18,27,43,Ducati Lenovo Team,Ducati,Ducati Lenovo Team,True,JM43,AU,Australia
+20,Pol,Espargaro,Granollers,1991-06-10,31,44,Repsol Honda Team,Honda,Repsol Honda Team,True,PE44,ES,Spain
+21,Tetsuta,Nagashima,Kanagawa,1992-07-02,30,45, LCR Honda IDEMITSU ,,,True,TN45,JP,Japan
+22,Fabio,Di Giannantonio,Roma,1998-10-10,23,49,Gresini Racing MotoGP™,Ducati,Gresini Racing MotoGP™,True,FD49,IT,Italy
+23,Sylvain,Guintoli,Montelimar,1982-06-24,40,50,Team SUZUKI ECSTAR,Suzuki,Team SUZUKI ECSTAR,False,,FR,France
+24,Michele,Pirro,San Giovanni Rotondo,1986-07-05,36,51,Aruba.it Racing,Ducati,Aruba.it Racing,True,MP51,IT,Italy
+25,Francesco,Bagnaia,Torino,1997-01-14,25,63,Ducati Lenovo Team,Ducati,Ducati Lenovo Team,True,FB63,IT,Italy
+26,Marco,Bezzecchi,Rimini,1998-11-12,23,72,Mooney VR46 Racing Team,Ducati,Mooney VR46 Racing Team,True,MB72,IT,Italy
+27,Alex,Marquez,Cervera,1996-04-23,26,73,LCR Honda Castrol,Honda,LCR Honda,True,AM73,ES,Spain
+28,Mika,Kallio,Valkeakoski,1982-11-08,39,82,Red Bull KTM Tech 3,KTM,Tech3 KTM Factory Racing,False,MK82,FI,Finland
+29,Takuya,Tsuda,,1984-04-27,38,85,Team SUZUKI Ecstar,,,True,TT85,JP,Japan
+30,Remy,Gardner,Sydney,1998-02-24,24,87,Tech3 KTM Factory Racing,KTM,Tech3 KTM Factory Racing,True,RG87,AU,Australia
+31,Miguel,Oliveira,Pragal,1995-01-04,27,88,Red Bull KTM Factory Racing,KTM,Red Bull KTM Factory Racing,True,MO88,PT,Portugal
+32,Jorge,Martin,Madrid,1998-01-29,24,89,Prima Pramac Racing,Ducati,Prima Pramac Racing,True,JM89,ES,Spain
+33,Kazuki,Watanabe,,1990-10-02,32,92,Team SUZUKI ECSTAR,,,True,KW92,JP,Japan
+34,Marc,Marquez,Cervera,1993-02-17,29,93,Repsol Honda Team,Honda,Repsol Honda Team,True,MM93,ES,Spain

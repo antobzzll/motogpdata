@@ -46,11 +46,12 @@ class MotoGPData:
         self.fevents_list_url = f"https://www.motogp.com/api/results-front/be/results-api/season/{self.selected_season_id}/events?finished=1"
         self.fevents_list = self.req.get(self.fevents_list_url).json()
         self.fevents_list_df = pd.json_normalize(self.fevents_list)
-        self.finished_events_list = self.fevents_list_df['circuit.nation'].to_list()
+        self.finished_events_list = self.fevents_list_df['short_name'].to_list(
+        )
 
         if self.verbose:
             print(
-                f"Loaded {self.selected_cat_name} season {self.selected_season_year}")
+                f"Loaded {self.selected_cat_name} season {self.selected_season_year} ({self.selected_season_id})")
             print(f"Available events: ", self.finished_events_list)
 
     def riders(self):
@@ -60,47 +61,55 @@ class MotoGPData:
         riders = self.req.get(riders_url)
         riders_df = pd.json_normalize(riders.json())
         self.riders_df = riders_df
-        # self.riders_df = riders_df[
-        #     ['name', 'surname', 'birth_city', 'birth_date', 'years_old',
-        #      'current_career_step.number', 'current_career_step.sponsored_team',
-        #      'current_career_step.team.constructor.name',
-        #      'current_career_step.team.name', 'current_career_step.in_grid',
-        #      'current_career_step.short_nickname', 'country.iso', 'country.name']]
         return self.riders_df
 
+    def _get_results(self, _event):
+
+        selected_event_id = self.fevents_list_df.loc[
+            self.fevents_list_df['short_name'] == _event, 'id'].item()
+        if self.verbose:
+            print(f"Getting {_event} ({selected_event_id})...")
+
+        # # category
+        categories_list_url = f"https://www.motogp.com/api/results-front/be/results-api/event/{selected_event_id}/categories"
+        categories_list = self.req.get(categories_list_url).json()
+        categories_list_df = pd.json_normalize(categories_list)
+        selected_cat_id = categories_list_df.loc[categories_list_df['name']
+                                                 == f"{self.selected_cat_name}™", 'id'].item()
+
+        # session
+        sessions_list_url = f"https://www.motogp.com/api/results-front/be/results-api/event/{selected_event_id}/category/{selected_cat_id}/sessions"
+        sessions_list = self.req.get(sessions_list_url).json()
+        sessions_list_df = pd.json_normalize(sessions_list)
+        selected_session_id = sessions_list_df.loc[sessions_list_df['type'] == 'RAC', 'id'].item(
+        )
+
+        # classification
+        classification_list_url = f"https://www.motogp.com/api/results-front/be/results-api/session/{selected_session_id}/classifications"
+        classification = self.req.get(classification_list_url).json()
+        classification_df = pd.json_normalize(
+            classification['classification'])
+
+        classification_df['event_id'] = selected_event_id
+        classification_df['event_name'] = _event
+        return classification_df
+
     def results(self, event: str):
-        # event
         event = event.upper()
-        # fevents_list_url = f"https://www.motogp.com/api/results-front/be/results-api/season/{self.selected_season_id}/events?finished=1"
-        # fevents_list = self.req.get(fevents_list_url).json()
-        # fevents_list_df = pd.json_normalize(fevents_list)
-        try:
-            selected_event_id = self.fevents_list_df.loc[
-                self.fevents_list_df['circuit.nation'] == event, 'id'].item()
-        except ValueError:
+
+        if event not in self.finished_events_list and event != 'ALL':
             raise ValueError(
                 f"Invalid event name. Available events for season "
                 f"{self.selected_season_year}: {self.finished_events_list}"
-            ) from None
-        else:
-            # category
-            categories_list_url = f"https://www.motogp.com/api/results-front/be/results-api/event/{selected_event_id}/categories"
-            categories_list = self.req.get(categories_list_url).json()
-            categories_list_df = pd.json_normalize(categories_list)
-            selected_cat_id = categories_list_df.loc[categories_list_df['name']
-                                                     == f"{self.category}™", 'id'].item()
-
-            # session
-            sessions_list_url = f"https://www.motogp.com/api/results-front/be/results-api/event/{selected_event_id}/category/{selected_cat_id}/sessions"
-            sessions_list = self.req.get(sessions_list_url).json()
-            sessions_list_df = pd.json_normalize(sessions_list)
-            selected_session_id = sessions_list_df.loc[sessions_list_df['type'] == 'RAC', 'id'].item(
             )
 
-            # classification
-            classification_list_url = f"https://www.motogp.com/api/results-front/be/results-api/session/{selected_session_id}/classifications"
-            classification = self.req.get(classification_list_url).json()
-            classification_df = pd.json_normalize(
-                classification['classification'])
-
-            return classification_df
+        if event == 'ALL':
+            if self.verbose:
+                print(
+                    f"Getting results for all events in season {self.selected_season_year} ...")
+            all_dfs = []
+            for ev in self.finished_events_list:
+                all_dfs.append(self._get_results(ev))
+            return pd.concat(all_dfs)
+        else:
+            return self._get_results(event)

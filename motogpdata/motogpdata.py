@@ -64,7 +64,6 @@ class MotoGPData:
         return self.riders_df
 
     def _get_results(self, _event):
-
         selected_event_id = self.fevents_list_df.loc[
             self.fevents_list_df['short_name'] == _event, 'id'].item()
         if self.verbose:

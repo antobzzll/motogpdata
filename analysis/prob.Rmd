@@ -16,6 +16,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r include=FALSE, echo=FALSE}
 library(readr)
 library(tidyverse)
@@ -98,6 +99,8 @@ pts_prob_pecco <- pecco %>%
   ungroup()
 
 pts_prob_pecco[is.na(pts_prob_pecco)] <- 0
+pts_prob_pecco <- arrange(pts_prob_pecco, desc(p))
+pts_prob_pecco
 ```
 
 
@@ -117,6 +120,8 @@ pts_prob_fabio <- fabio %>%
   ungroup()
 
 pts_prob_fabio[is.na(pts_prob_fabio)] <- 0
+pts_prob_fabio <- arrange(pts_prob_fabio, desc(p))
+pts_prob_fabio
 ```
 
 

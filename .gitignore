@@ -1,6 +1,4 @@
-scraper/venv/
-scraper/.ipynb_checkpoints
-scraper/__pycache__
+scraper
 .Rproj.user
 .ipynb_checkpoints
 motogpstats.Rproj

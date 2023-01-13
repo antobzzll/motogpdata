@@ -6,3 +6,4 @@ motogpdata/__pycache__
 .Rhistory
 .Rhistory
 data/
+.DS_Store

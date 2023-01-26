@@ -55,6 +55,10 @@ class MotoGPData:
             print(f"Available events: ", self.finished_events_list)
 
     def riders(self):
+        """
+        This function retrieves a list of riders from the MotoGP API for 
+        the selected season year and category ID.
+        """
         if self.verbose:
             print("Riders:")
         riders_url = f"https://api.motogp.com/riders-api/season/{self.selected_season_year}/riders?category={self.selected_cat_id}"
@@ -64,6 +68,16 @@ class MotoGPData:
         return self.riders_df
 
     def _get_results(self, _event):
+        """Function that gets the results of a MotoGP event.
+        It takes in an event name as an argument and uses it to get 
+        the event ID from the fevents_list_df dataframe. It then uses the event ID to get the category ID from the categories_list dataframe and uses that to get the session ID from the sessions_list dataframe. Finally, it uses the session ID to get a classification from the classification_list and returns a classification dataframe with additional columns for event ID and event name.
+
+        Args:
+            _event ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         selected_event_id = self.fevents_list_df.loc[
             self.fevents_list_df['short_name'] == _event, 'id'].item()
         if self.verbose:

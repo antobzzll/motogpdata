@@ -52,12 +52,16 @@ class MotoGPData:
         if self.verbose:
             print(
                 f"Loaded {self.selected_cat_name} season {self.selected_season_year} ({self.selected_season_id})")
-            print(f"Available events: ", self.finished_events_list)
+            print(f"Available events:", self.finished_events_list)
+
 
     def riders(self):
         """
         This function retrieves a list of riders from the MotoGP API for 
         the selected season year and category ID.
+
+        Returns:
+            pandas.DataFrame: dataframe with riders data
         """
         if self.verbose:
             print("Riders:")
@@ -67,10 +71,17 @@ class MotoGPData:
         self.riders_df = riders_df
         return self.riders_df
 
+
     def _get_results(self, _event):
-        """Function that gets the results of a MotoGP event.
+        """
+        Function that gets the results of a MotoGP event.
         It takes in an event name as an argument and uses it to get 
-        the event ID from the fevents_list_df dataframe. It then uses the event ID to get the category ID from the categories_list dataframe and uses that to get the session ID from the sessions_list dataframe. Finally, it uses the session ID to get a classification from the classification_list and returns a classification dataframe with additional columns for event ID and event name.
+        the event ID from the fevents_list_df dataframe. It then uses the
+        event ID to get the category ID from the categories_list dataframe 
+        and uses that to get the session ID from the sessions_list dataframe.
+        Finally, it uses the session ID to get a classification from the 
+        classification_list and returns a classification dataframe with 
+        additional columns for event ID and event name.
 
         Args:
             _event ([type]): [description]
@@ -107,7 +118,19 @@ class MotoGPData:
         classification_df['event_name'] = _event
         return classification_df
 
+
     def results(self, event: str):
+        """Retrieves a classification dataframe for a given event.
+
+        Args:
+            event (str): event code in the form of QAT, AUS, etc.
+
+        Raises:
+            ValueError: if event code is wrong.
+
+        Returns:
+            pandas.DataFrame: dataframe with classification results
+        """
         event = event.upper()
 
         if event not in self.finished_events_list and event != 'ALL':

@@ -31,12 +31,13 @@ class MotoGPData:
         cat_list_df = pd.json_normalize(
             cat_list)[['id', 'name']].set_index('name')
         categories = cat_list_df.index.to_list()
+        av_cat_message = f"Available categories: {categories}"
         if self.verbose:
-            print(f"Available categories: {categories}")
+            print(av_cat_message)
 
         if category not in categories:
             raise ValueError(
-                f"Invalid category. Available categories: {categories}")
+                f"Invalid category. {av_cat_message}")
         else:
             self.selected_cat_name = category
             self.selected_cat_id = cat_list_df[

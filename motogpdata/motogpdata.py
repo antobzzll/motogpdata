@@ -32,8 +32,8 @@ class MotoGPData:
             cat_list)[['id', 'name']].set_index('name')
         categories = cat_list_df.index.to_list()
         av_cat_message = f"Available categories: {categories}"
-        if self.verbose:
-            print(av_cat_message)
+        # if self.verbose:
+        #     print(av_cat_message)
 
         if category not in categories:
             raise ValueError(
@@ -53,8 +53,8 @@ class MotoGPData:
         if self.verbose:
             print(
                 f"Loaded {self.selected_cat_name} season {self.selected_season_year} ({self.selected_season_id})")
+            print(av_cat_message)
             print(f"Available events:", self.finished_events_list)
-
 
     def riders(self):
         """
@@ -71,7 +71,6 @@ class MotoGPData:
         riders_df = pd.json_normalize(riders.json())
         self.riders_df = riders_df
         return self.riders_df
-
 
     def _get_results(self, _event):
         """
@@ -93,7 +92,7 @@ class MotoGPData:
         selected_event_id = self.fevents_list_df.loc[
             self.fevents_list_df['short_name'] == _event, 'id'].item()
         if self.verbose:
-            print(f"Getting {_event} ({selected_event_id})...")
+            print(f"\t* {_event} ({selected_event_id}) ... ", end='')
 
         # # category
         categories_list_url = f"https://www.motogp.com/api/results-front/be/results-api/event/{selected_event_id}/categories"
@@ -117,14 +116,15 @@ class MotoGPData:
 
         classification_df['event_id'] = selected_event_id
         classification_df['event_name'] = _event
+
+        print("Ok.")
         return classification_df
 
-
-    def results(self, event: str):
+    def results(self, event: str = 'all'):
         """Retrieves a classification dataframe for a given event.
 
         Args:
-            event (str): event code in the form of QAT, AUS, etc.
+            event (str): event code in the form of QAT, AUS, etc. Defaults to 'all'.
 
         Raises:
             ValueError: if event code is wrong.
@@ -143,10 +143,15 @@ class MotoGPData:
         if event == 'ALL':
             if self.verbose:
                 print(
-                    f"Getting results for all events in season {self.selected_season_year} ...")
+                    f"Retrieving results for all events in season {self.selected_season_year}:")
             all_dfs = []
             for ev in self.finished_events_list:
                 all_dfs.append(self._get_results(ev))
+            if self.verbose:
+                print("Dataframe concatenated.")
             return pd.concat(all_dfs)
         else:
+            if self.verbose:
+                print(
+                    f"Retrieving results for event {event} in season {self.selected_season_year}:")
             return self._get_results(event)

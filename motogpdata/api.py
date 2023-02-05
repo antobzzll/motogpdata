@@ -1,8 +1,10 @@
 import pandas as pd
 import requests
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-class MotoGPData:
+class Handler:
     """Class to retrieve data from motogp.com API
     """
 
@@ -173,3 +175,29 @@ class MotoGPData:
                 print(
                     f"Retrieving results for event {event} in season {self.selected_season_year}:")
             return self._get_results(event, session=session, s_num=s_num)
+
+
+def season_range_results(
+    season_start : int,
+    season_end : int,
+    category : str = 'MotoGP',
+    session : str = 'RAC',
+    s_num : int = 0,
+    verbose : bool = False):
+    
+    motogp = Handler()
+    dataframes = []
+    for season in range(season_start, season_end+1):
+        
+        if verbose:
+            print(season, end='')
+            
+        motogp.load_season(season=season, category=category)
+        dataframes.append(motogp.results(session=session, s_num=s_num))
+        
+        if verbose:
+            print(" - OK")
+            
+    df = pd.concat(dataframes)
+    
+    return df

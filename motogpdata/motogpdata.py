@@ -89,7 +89,7 @@ class MotoGPData:
         
         return riders_df
 
-    def _get_results(self, _event):
+    def _get_results(self, event: str, session: str = 'RAC', s_num: int = 0):
         """
         Function that gets the results of a MotoGP event.
         It takes in an event name as an argument and uses it to get 
@@ -107,11 +107,11 @@ class MotoGPData:
             [type]: [description]
         """
         selected_event_id = self._fevents_list_df.loc[
-            self._fevents_list_df['short_name'] == _event, 'id'].item()
+            self._fevents_list_df['short_name'] == event, 'id'].item()
         if self._verbose:
-            print(f"\t* {_event} ({selected_event_id}) ... ", end='')
+            print(f"\t* {event} ({selected_event_id}) ... ", end='')
 
-        # # category
+        # category
         categories_list_url = f"{self._base_url}/results-front/be/results-api/event/{selected_event_id}/categories"
         categories_list = self._req.get(categories_list_url).json()
         categories_list_df = pd.json_normalize(categories_list)
@@ -122,23 +122,23 @@ class MotoGPData:
         sessions_list_url = f"{self._base_url}/results-front/be/results-api/event/{selected_event_id}/category/{selected_cat_id}/sessions"
         sessions_list = self._req.get(sessions_list_url).json()
         sessions_list_df = pd.json_normalize(sessions_list)
-        selected_session_id = sessions_list_df.loc[sessions_list_df['type'] == 'RAC', 'id'].item(
-        )
+        sessions_list_df['number'] = sessions_list_df['number'].fillna(0)
+        self.sessions = sessions_list_df
+        selected_session_id = sessions_list_df.loc[
+            (sessions_list_df['type'] == session) & (sessions_list_df['number'] == s_num), 'id'].item()
 
         # classification
         classification_list_url = f"{self._base_url}/results-front/be/results-api/session/{selected_session_id}/classifications"
         classification = self._req.get(classification_list_url).json()
-        classification_df = pd.json_normalize(
-            classification['classification'])
-
+        classification_df = pd.json_normalize(classification['classification'])
         classification_df['event_id'] = selected_event_id
-        classification_df['event_name'] = _event
+        classification_df['event_name'] = event
 
         if self._verbose:
             print("Ok.")
         return classification_df
 
-    def results(self, event: str = 'all'):
+    def results(self, event: str = 'all', session: str = 'RAC', s_num: int = 0):
         """Retrieves a classification dataframe for a given event.
 
         Args:
@@ -164,7 +164,7 @@ class MotoGPData:
                     f"Retrieving results for all events in season {self.selected_season_year}:")
             all_dfs = []
             for ev in self.events:
-                all_dfs.append(self._get_results(ev))
+                all_dfs.append(self._get_results(ev, session=session, s_num=s_num))
             if self._verbose:
                 print("Dataframe concatenated.")
             return pd.concat(all_dfs)
@@ -172,4 +172,4 @@ class MotoGPData:
             if self._verbose:
                 print(
                     f"Retrieving results for event {event} in season {self.selected_season_year}:")
-            return self._get_results(event)
+            return self._get_results(event, session=session, s_num=s_num)

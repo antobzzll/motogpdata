@@ -3,21 +3,39 @@ import requests
 
 
 class MotoGPData:
-    def __init__(self, season: int = 0, category: str = "MotoGP",
-                 verbose: bool = False):
-        self.verbose = verbose
-        self.req = requests.Session()
+    """Class to retrieve data from motogp.com API
+    """
 
-        # season
-        seasons_list_url = "https://www.motogp.com/api/results-front/be/results-api/seasons?test=0"
-        seasons_list = self.req.get(seasons_list_url, timeout=60).json()
+    def __init__(self, verbose: bool = False):
+        """
+        The method creates a requests session, sets the base URL for the API, 
+        and then uses the requests session to get a list of seasons from the 
+        API and stores it in self._seasons_list. It then normalizes this list 
+        into a pandas dataframe and stores it in self.seasons as a list of years.
 
-        if not season:
-            selected_season = seasons_list[0]
+        Args:
+            verbose (bool, optional): verbose level. Defaults to False.
+        """
+        self._verbose = verbose
+        self._req = requests.Session()
+        self._base_url = 'https://www.motogp.com/api'
+        self._api_base_url = 'https://api.motogp.com'
+        
+        # seasons list
+        seasons_list_url = f"{self._base_url}/results-front/be/results-api/seasons?test=0"
+        self._seasons_list = self._req.get(seasons_list_url, timeout=60).json()
+        seasons_list_df = pd.json_normalize(self._seasons_list)
+        self.seasons = seasons_list_df['year'].to_list()
+
+    def load_season(self, season: int = 0, category: str = "MotoGP"):
+        # season validation
+        if not season:  # chose the last season if variable is empty
+            selected_season = self._seasons_list[0]
             self.selected_season_id = selected_season['id']
             self.selected_season_year = selected_season['year']
         else:
-            seasons_list_df = pd.json_normalize(seasons_list)
+            seasons_list_df = pd.json_normalize(self._seasons_list)
+            self.seasons = seasons_list_df['year'].to_list()
             try:
                 self.selected_season_id = seasons_list_df.loc[
                     seasons_list_df['year'] == season, 'id'].item()
@@ -26,13 +44,13 @@ class MotoGPData:
                 raise ValueError("Invalid season year") from None
 
         # selected season categories ids
-        cat_list_url = f"https://api.motogp.com/riders-api/season/{self.selected_season_year}/categories"
-        cat_list = self.req.get(cat_list_url, timeout=60).json()
+        cat_list_url = f"{self._api_base_url}/riders-api/season/{self.selected_season_year}/categories"
+        cat_list = self._req.get(cat_list_url, timeout=60).json()
         cat_list_df = pd.json_normalize(
             cat_list)[['id', 'name']].set_index('name')
         categories = cat_list_df.index.to_list()
         av_cat_message = f"Available categories: {categories}"
-        # if self.verbose:
+        # if self._verbose:
         #     print(av_cat_message)
 
         if category not in categories:
@@ -44,17 +62,16 @@ class MotoGPData:
                 cat_list_df.index == self.selected_cat_name]['id'].item()
 
         # list of events
-        self.fevents_list_url = f"https://www.motogp.com/api/results-front/be/results-api/season/{self.selected_season_id}/events?finished=1"
-        self.fevents_list = self.req.get(self.fevents_list_url).json()
-        self.fevents_list_df = pd.json_normalize(self.fevents_list)
-        self.finished_events_list = self.fevents_list_df['short_name'].to_list(
-        )
+        self._fevents_list_url = f"{self._base_url}/results-front/be/results-api/season/{self.selected_season_id}/events?finished=1"
+        self._fevents_list = self._req.get(self._fevents_list_url).json()
+        self._fevents_list_df = pd.json_normalize(self._fevents_list)
+        self.events = self._fevents_list_df['short_name'].to_list()
 
-        if self.verbose:
+        if self._verbose:
             print(
                 f"Loaded {self.selected_cat_name} season {self.selected_season_year} ({self.selected_season_id})")
             print(av_cat_message)
-            print(f"Available events:", self.finished_events_list)
+            print(f"Available events:", self.events)
 
     def riders(self):
         """
@@ -64,13 +81,13 @@ class MotoGPData:
         Returns:
             pandas.DataFrame: dataframe with riders data
         """
-        if self.verbose:
+        if self._verbose:
             print("Riders:")
-        riders_url = f"https://api.motogp.com/riders-api/season/{self.selected_season_year}/riders?category={self.selected_cat_id}"
-        riders = self.req.get(riders_url)
+        riders_url = f"{self._api_base_url}/riders-api/season/{self.selected_season_year}/riders?category={self.selected_cat_id}"
+        riders = self._req.get(riders_url)
         riders_df = pd.json_normalize(riders.json())
-        self.riders_df = riders_df
-        return self.riders_df
+        
+        return riders_df
 
     def _get_results(self, _event):
         """
@@ -89,35 +106,36 @@ class MotoGPData:
         Returns:
             [type]: [description]
         """
-        selected_event_id = self.fevents_list_df.loc[
-            self.fevents_list_df['short_name'] == _event, 'id'].item()
-        if self.verbose:
+        selected_event_id = self._fevents_list_df.loc[
+            self._fevents_list_df['short_name'] == _event, 'id'].item()
+        if self._verbose:
             print(f"\t* {_event} ({selected_event_id}) ... ", end='')
 
         # # category
-        categories_list_url = f"https://www.motogp.com/api/results-front/be/results-api/event/{selected_event_id}/categories"
-        categories_list = self.req.get(categories_list_url).json()
+        categories_list_url = f"{self._base_url}/results-front/be/results-api/event/{selected_event_id}/categories"
+        categories_list = self._req.get(categories_list_url).json()
         categories_list_df = pd.json_normalize(categories_list)
         selected_cat_id = categories_list_df.loc[categories_list_df['name']
                                                  == f"{self.selected_cat_name}™", 'id'].item()
 
         # session
-        sessions_list_url = f"https://www.motogp.com/api/results-front/be/results-api/event/{selected_event_id}/category/{selected_cat_id}/sessions"
-        sessions_list = self.req.get(sessions_list_url).json()
+        sessions_list_url = f"{self._base_url}/results-front/be/results-api/event/{selected_event_id}/category/{selected_cat_id}/sessions"
+        sessions_list = self._req.get(sessions_list_url).json()
         sessions_list_df = pd.json_normalize(sessions_list)
         selected_session_id = sessions_list_df.loc[sessions_list_df['type'] == 'RAC', 'id'].item(
         )
 
         # classification
-        classification_list_url = f"https://www.motogp.com/api/results-front/be/results-api/session/{selected_session_id}/classifications"
-        classification = self.req.get(classification_list_url).json()
+        classification_list_url = f"{self._base_url}/results-front/be/results-api/session/{selected_session_id}/classifications"
+        classification = self._req.get(classification_list_url).json()
         classification_df = pd.json_normalize(
             classification['classification'])
 
         classification_df['event_id'] = selected_event_id
         classification_df['event_name'] = _event
 
-        print("Ok.")
+        if self._verbose:
+            print("Ok.")
         return classification_df
 
     def results(self, event: str = 'all'):
@@ -134,24 +152,24 @@ class MotoGPData:
         """
         event = event.upper()
 
-        if event not in self.finished_events_list and event != 'ALL':
+        if event not in self.events and event != 'ALL':
             raise ValueError(
                 f"Invalid event name. Available events for season "
-                f"{self.selected_season_year}: {self.finished_events_list}"
+                f"{self.selected_season_year}: {self.events}"
             )
 
         if event == 'ALL':
-            if self.verbose:
+            if self._verbose:
                 print(
                     f"Retrieving results for all events in season {self.selected_season_year}:")
             all_dfs = []
-            for ev in self.finished_events_list:
+            for ev in self.events:
                 all_dfs.append(self._get_results(ev))
-            if self.verbose:
+            if self._verbose:
                 print("Dataframe concatenated.")
             return pd.concat(all_dfs)
         else:
-            if self.verbose:
+            if self._verbose:
                 print(
                     f"Retrieving results for event {event} in season {self.selected_season_year}:")
             return self._get_results(event)

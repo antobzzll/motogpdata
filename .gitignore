@@ -7,3 +7,5 @@ motogpdata/__pycache__
 .Rhistory
 data/
 .DS_Store
+test_analysis.ipynb
+test2.ipynb

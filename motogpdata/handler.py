@@ -101,7 +101,8 @@ class Event:
     def results(self,
                 session: str = 'RAC',
                 s_num: int = 0,
-                include_session: bool = False):
+                # include_session: bool = False
+                ):
 
         selected_session_id = self.sessions.loc[(self.sessions['type'] == session) & (self.sessions['number'] == s_num), 'id'].item()
 

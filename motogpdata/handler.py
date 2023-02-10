@@ -73,26 +73,27 @@ class Season(_Handler):
 
 class Event:
     def __init__(self, season_obj: object, short_name: str):
-        season_obj.selected_event_id = season_obj.events.loc[season_obj.events['short_name'] == short_name, 'id'].item(
-        )
+        self.selected_event_id = season_obj.events.loc[season_obj.events['short_name'] == short_name, 'id'].item()
         if season_obj._verbose:
-            print(f"Loading event '{short_name}' ({season_obj.selected_event_id}) ... ", end='')
+            print(f"Loading event '{short_name}' ({self.selected_event_id}) ... ", end='')
 
         self.season_obj = season_obj
+        self.name = season_obj.events.loc[season_obj.events['short_name'] == short_name, 'name'].item()
         self.short_name = short_name
 
         # category
-        categories_list_url = f"{season_obj._base_url}/results-front/be/results-api/event/{season_obj.selected_event_id}/categories"
+        categories_list_url = f"{season_obj._base_url}/results-front/be/results-api/event/{self.selected_event_id}/categories"
         categories_list = season_obj._req.get(categories_list_url).json()
         categories_list_df = pd.json_normalize(categories_list)
         selected_cat_id = categories_list_df.loc[categories_list_df['name'] == f"{season_obj.selected_cat_name}™", 'id'].item()
 
         # session
-        sessions_list_url = f"{season_obj._base_url}/results-front/be/results-api/event/{season_obj.selected_event_id}/category/{selected_cat_id}/sessions"
+        sessions_list_url = f"{season_obj._base_url}/results-front/be/results-api/event/{self.selected_event_id}/category/{selected_cat_id}/sessions"
         sessions_list = season_obj._req.get(sessions_list_url).json()
         sessions_list_df = pd.json_normalize(sessions_list)
         sessions_list_df['number'] = sessions_list_df['number'].fillna(0)
         self.sessions = sessions_list_df
+        self.circuit = self.sessions['circuit'][1]
 
         if self.season_obj._verbose:
             print("Done.")
@@ -108,7 +109,7 @@ class Event:
         classification_list_url = f"{self.season_obj._base_url}/results-front/be/results-api/session/{selected_session_id}/classifications"
         classification = self.season_obj._req.get(classification_list_url).json()
         classification_df = pd.json_normalize(classification['classification'])
-        classification_df['event_id'] = self.season_obj.selected_event_id
+        classification_df['event_id'] = self.selected_event_id
         classification_df['event_name'] = self.short_name
 
         return classification_df

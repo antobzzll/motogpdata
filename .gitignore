@@ -10,3 +10,5 @@ data/
 test_analysis.ipynb
 test2.ipynb
 motogpdata/api copy.py
+track_temp.ipynb
+old_example.ipynb

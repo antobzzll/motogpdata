@@ -131,8 +131,24 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
         'track_cond': condition_ls
     })
     
-    df['tot_time_f'] = pd.to_numeric(df['tot_time'].str.split('.', expand=True)[0].str.replace(':', '.'))
+    # time conversion into float
+    def _time2float(time_string):
+        time = dt.strptime(time_string, "%M:%S.%f")
+        sec_micro = round(dt.second + (dt.microsecond / 1000000))
+        return dt.minute + sec_micro / 100
+    
+    # df['tot_time_f'] = pd.to_numeric(df['tot_time'].str.split('.', expand=True)[0].str.replace(':', '.'))
+    df['tot_time_f'] = df['tot_time'].apply(_time2float)
     df['avg_time'] = df['tot_time_f'] / df['tot_laps']
 
-    # df['position'] = df['position'].fillna(0)
+    categories = df['position'].sort_values(ascending=False).to_list()
+    categories = list(set((int(i) for i in categories if not np.isnan(i))))
+    categories = [str(i) for i in categories]
+    categories.append('NC')
+    categories = list(reversed(categories))
+    df['position'] = pd.Categorical(
+        df['position'].astype(str).str.split('.', expand=True)[0],
+        categories=categories, 
+        ordered=True)
+    df['position'] = df['position'].fillna('NC')
     return df

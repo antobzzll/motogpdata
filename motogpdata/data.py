@@ -81,7 +81,7 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
     rider_name_ls = []
     points_ls = []
     
-    for s in seasons_list:
+    for s in tqdm(seasons_list):
         try:
             season = Season(s, 'MotoGP')
         except ValueError:
@@ -118,29 +118,32 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
     # dataframe creation
     df = pd.DataFrame({
         'rider_name': rider_name_ls,
-        'season': season_ls,
+        'season_year': season_ls,
         'event_short_name': event_shortname_ls,
         'circuit': circuit_ls,
+        'track_cond': condition_ls,
         'tot_time': time_ls,
         'avg_speed': avg_speed_ls,
         'position': position_ls,
         'points': points_ls,
         'gap_first': gap_first_ls,
         'gap_lap': gap_lap_ls,
-        'tot_laps': total_laps_ls,
-        'track_cond': condition_ls
+        'tot_laps': total_laps_ls
     })
     
-    # time conversion into float
     def _time2float(time_string):
-        time = dt.strptime(time_string, "%M:%S.%f")
-        sec_micro = round(dt.second + (dt.microsecond / 1000000))
-        return dt.minute + sec_micro / 100
+        if time_string != '':
+            time = dt.strptime(time_string, "%M:%S.%f")
+            sec_micro = time.second + (time.microsecond / 1000000)
+            res = time.minute + sec_micro / 100
+            return res
+        else:
+            return None
     
-    # df['tot_time_f'] = pd.to_numeric(df['tot_time'].str.split('.', expand=True)[0].str.replace(':', '.'))
-    df['tot_time_f'] = df['tot_time'].apply(_time2float)
-    df['avg_time'] = df['tot_time_f'] / df['tot_laps']
-
+    df['tot_time_m'] = df['tot_time'].apply(_time2float)
+    df['avg_lap_time_m'] = df['tot_time_m'] / df['tot_laps']
+    df = df.drop(columns=['tot_time'])
+    
     categories = df['position'].sort_values(ascending=False).to_list()
     categories = list(set((int(i) for i in categories if not np.isnan(i))))
     categories = [str(i) for i in categories]
@@ -151,4 +154,6 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
         categories=categories, 
         ordered=True)
     df['position'] = df['position'].fillna('NC')
+    df['season_year'] = pd.to_datetime(df['season_year'], format="%Y")
+
     return df

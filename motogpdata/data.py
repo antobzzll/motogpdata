@@ -68,7 +68,7 @@ def event_track_info(category: str = 'MotoGP', start: int = 2005, end: int = thi
 
 
 def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_list()):
-    season_ls = []
+    date = []
     event_shortname_ls = []
     circuit_ls = []
     time_ls = []
@@ -96,7 +96,7 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
                     try:
                         if event.results()['rider.full_name'].str.contains(rider_name).any():
                             res = event.results()
-                            season_ls.append(s)
+                            date.append(event.sessions.loc[(event.sessions['type'] == 'RAC') & (event.sessions['status'] == 'Official'), 'date'].item())
                             event_shortname_ls.append(event.short_name)
                             circuit_ls.append(event.circuit)
                             time_ls.append(res.loc[res['rider.full_name'] == rider_name, 'time'].item())
@@ -118,7 +118,7 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
     # dataframe creation
     df = pd.DataFrame({
         'rider_name': rider_name_ls,
-        'season_year': season_ls,
+        'date': date,
         'event_short_name': event_shortname_ls,
         'circuit': circuit_ls,
         'track_cond': condition_ls,
@@ -154,6 +154,7 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
         categories=categories, 
         ordered=True)
     df['position'] = df['position'].fillna('NC')
-    df['season_year'] = pd.to_datetime(df['season_year'], format="%Y")
+    df['date'] = pd.to_datetime(df['date'])
+    df['year'] = df['date'].dt.year
 
     return df

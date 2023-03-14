@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from datetime import datetime as dt
-from .handler import _Handler, Season, Event
+from .handler import _Handler, Season, Event, _tottime2min
 
 this_year = int(dt.today().year)
 
@@ -131,16 +131,8 @@ def rider_summary(rider_name: str, category: str, seasons_list: list = seasons_l
         'tot_laps': total_laps_ls
     })
     
-    def _time2float(time_string):
-        if time_string != '':
-            time = dt.strptime(time_string, "%M:%S.%f")
-            sec_micro = time.second + (time.microsecond / 1000000)
-            res = time.minute + sec_micro / 100
-            return res
-        else:
-            return None
     
-    df['tot_time_m'] = df['tot_time'].apply(_time2float)
+    df['tot_time_m'] = df['tot_time'].apply(_tottime2min)
     df['avg_lap_time_m'] = df['tot_time_m'] / df['tot_laps']
     df = df.drop(columns=['tot_time'])
     

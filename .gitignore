@@ -7,9 +7,15 @@ motogpdata/__pycache__
 .Rhistory
 data/
 .DS_Store
-test_analysis.ipynb
-test2.ipynb
+rider_performance.ipynb
 motogpdata/api copy.py
-track_temp.ipynb
+track_temp_speed.ipynb
 old_example.ipynb
 motogp_analisi_dati_pubblici_prospetto.docx
+test.ipynb
+pdf
+Analysis.pdf
+race_performance.ipynb
+track_temp_speed_OK.ipynb
+analysis_scraping_QAT_OK.ipynb
+analysis_scraping_ITA_OK.ipynb

@@ -189,23 +189,33 @@ class Event:
                     laptime_rows.append(line)
                     # print(line)
                     
-        timesheet = pd.DataFrame(columns=['rider', 'lap', 'laptime_str', 't1', 't2', 't3', 't4', 'speed'])
-
-        for index, col in self.results().iterrows():
+        data_rows = []
+        for _, col in self.results().iterrows():
             for n, row in enumerate(laptime_rows, start=1):
                 row = row.split(' ')
-                timesheet = timesheet.append(
-                    {'rider':col['rider.full_name'],
-                    'lap': row[1],
-                    'laptime_str': row[0],
-                    't1': row[2],
-                    't2': row[3],
-                    't3': row[4],
-                    't4': row[6],
-                    'speed': row[5]}, ignore_index=True)
+                # timesheet = timesheet.append(
+                #     {'rider':col['rider.full_name'],
+                #     'lap': row[1],
+                #     'laptime_str': row[0],
+                #     't1': row[2], 
+                #     't2': row[3], 
+                #     't3': row[4],
+                #     't4': row[6],
+                #     'speed': row[5]}, ignore_index=True)
+                data_rows.append({'rider':col['rider.full_name'],
+                     'lap': row[1],
+                     'laptime_str': row[0],
+                     't1': row[2],
+                     't2': row[3],
+                     't3': row[4],
+                     't4': row[6],
+                     'speed': row[5]})
                 if n == col['total_laps']:
                     laptime_rows = laptime_rows[n:]
                     break
+                
+        timesheet = pd.DataFrame(data_rows, columns=['rider', 'lap', 'laptime_str', 't1', 't2', 't3', 't4', 'speed'])
+        
         timesheet['laptime_sec'] = timesheet['laptime_str'].apply(_laptime2sec)
         timesheet['lap'] = timesheet['lap'].astype(int)
         timesheet[['t1', 't2', 't3', 't4', 'speed']] = timesheet[['t1', 't2', 't3', 't4', 'speed']].astype(float)
